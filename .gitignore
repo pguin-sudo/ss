@@ -31,7 +31,8 @@
 *.out
 *.app
 
-# Others
-.vs
+# Compiled projects
 x64
-x86
+
+# Editors files
+.vs
