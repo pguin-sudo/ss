@@ -38,8 +38,8 @@ Sphere Sandbox is a simple physics engine implemented in C++ using the SFML libr
 
 2. **Controls:**
 
-   - **Horizontal arrows**: Increase and decrease balls' amortization;
-   - **Vertical arrows**: Increase and decrease gravity;
+   - **Horizontal arrows**: Increasing and decreasing balls' amortization;
+   - **Vertical arrows**: Increasing and decreasing gravity;
 
 ## Contributing
 
@@ -54,9 +54,8 @@ This project is licensed under the MIT License.
 - Thanks to SFML for providing a simple and fast multimedia library for C++.
 - Inspired by the desire to learn and explore basic physics simulations.
 
-## Acknowledgments
+## TODO
 
-**TODO:**
 1. Sandbox's restarting;
 2. Add debug mode switch;
 3. Add interaction switch;
