@@ -24,6 +24,7 @@ int main() {
         while (window.isOpen()) {
             sf::Event event;
             while (window.pollEvent(event)) {
+
                 switch (event.type) {
                 case sf::Event::Closed:
                     window.close();
@@ -41,20 +42,22 @@ int main() {
 
                     if (event.key.code == sf::Keyboard::Space)
                     {
-                        game.Update(0.01);
+                        game.Update(0.025);
 
-                        text.setString("Gravity       ( UP /DOWN):  " + std::to_string(Settings::GetGravityStrength()) + '\n' +
-                            "Amortization  (RIGHT/LEFT):  " + std::to_string(Settings::GetAmortization()));
-
-                        window.clear();
-                        window.draw(text);
-                        window.draw(game);
-                        window.display();
+                        
                     }
                     break;
                 default:
                     break;
                 }
+
+                text.setString("Gravity       ( UP /DOWN):  " + std::to_string(Settings::GetGravityStrength()) + '\n' +
+                    "Amortization  (RIGHT/LEFT):  " + std::to_string(Settings::GetAmortization()));
+
+                window.clear();
+                window.draw(text);
+                window.draw(game);
+                window.display();
             }
         }
     }
