@@ -21,7 +21,7 @@ void Game::Init()
     for (int i = 0; i < NUM_CIRCLES; ++i)
     {
         auto radius_v = radius(gen);
-        Circle p({ posX(gen), posY(gen) }, { velX(gen), velY(gen) }, (float)(2*3.14f*std::pow(radius_v, 2)), radius_v, PASTEL_COLOR[color(gen)]);
+        Circle p({ posX(gen), posY(gen) }, { velX(gen), velY(gen) }, (float)(4*3.14f*std::pow(radius_v, 3)), radius_v, PASTEL_COLOR[color(gen)]);
 
         physicsEngine->AddCircle(p);
     }
