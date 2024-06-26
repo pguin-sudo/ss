@@ -30,28 +30,31 @@ std::vector<Circle>& Engine::GetCircles() const {
 }
 
 void Engine::Update(const float& deltaTime) {
+    auto cached_amortization = Settings::GetAmortization();
+    auto cached_gravity_strength = Settings::GetGravityStrength();
+
     for (auto& circle : circles) {
         // Handle wall collisions
         float radius = circle.radius;
 
         if (circle.position.x - radius < PHYSICS_MARGIN) {
             circle.position.x = radius + PHYSICS_MARGIN;
-            circle.velocity.x *= -AMORTISATION;
+            circle.velocity.x *= -cached_amortization;
         }
 
         if (circle.position.x + radius > SCREEN_WIDTH - PHYSICS_MARGIN) {
             circle.position.x = SCREEN_WIDTH - PHYSICS_MARGIN - radius;
-            circle.velocity.x *= -AMORTISATION;
+            circle.velocity.x *= cached_amortization;
         }
 
         if (circle.position.y - radius < PHYSICS_MARGIN) {
             circle.position.y = radius + PHYSICS_MARGIN;
-            circle.velocity.y *= -AMORTISATION;
+            circle.velocity.y *= -cached_amortization;
         }
 
         if (circle.position.y + radius > SCREEN_HEIGHT - PHYSICS_MARGIN) {
             circle.position.y = SCREEN_HEIGHT - PHYSICS_MARGIN - radius;
-            circle.velocity.y *= -AMORTISATION;
+            circle.velocity.y *= -cached_amortization;
         }
 
         //// Handle circle collisions
@@ -84,7 +87,7 @@ void Engine::Update(const float& deltaTime) {
         //}
 
         // Handle gravity
-        Vector2 gravity = { 0, GRAVITY_STRENGTH * circle.mass };
+        Vector2 gravity = { 0, cached_gravity_strength * circle.mass };
         circle.ApplyForce(gravity, deltaTime);
 
         // Update circle position based on velocity

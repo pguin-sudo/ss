@@ -38,18 +38,18 @@ void Game::draw(sf::RenderTarget& target, sf::RenderStates states) const
     auto circles = physicsEngine->GetCircles();
 
     for (size_t i = 0; i < circles.size(); ++i) {
-        const auto& circle = circles[i];
-        const auto& color = circle.color;
+        const Circle& circle = circles[i];
+        const sf::Color& color = circle.color;
 
-        sf::CircleShape shape(circle.radius);
+        sf::CircleShape shape(circle.radius-2.f);
         shape.setPosition(circle.position.x-circle.radius, circle.position.y-circle.radius);
-        shape.setOutlineThickness(2.f);
+        shape.setOutlineThickness(4.f);
+        shape.setFillColor(color - sf::Color(0, 0, 0, 128));
         shape.setOutlineColor(color);
-        shape.setFillColor(color);
         target.draw(shape, states);
     }
 
-    sf::RectangleShape border({ (float)SCREEN_WIDTH - PHYSICS_MARGIN * 2 + 2.f, (float)SCREEN_HEIGHT - PHYSICS_MARGIN * 2 + 2.f });
+    sf::RectangleShape border({ (float)SCREEN_WIDTH - PHYSICS_MARGIN * 2, (float)SCREEN_HEIGHT - PHYSICS_MARGIN * 2});
     border.setPosition(PHYSICS_MARGIN, PHYSICS_MARGIN);
     border.setOutlineThickness(4.f);
     border.setOutlineColor(sf::Color(240, 240, 240));
