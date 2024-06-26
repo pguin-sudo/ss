@@ -34,5 +34,9 @@
 # Compiled projects
 x64
 
+# Compiling logs
+Debug
+Release
+
 # Editors files
 .vs
