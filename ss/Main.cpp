@@ -1,26 +1,43 @@
-#define NOMINMAX
+#include <SFML/Graphics.hpp>
 
-#include <stdio.h>
-#include <time.h>
-#include <windows.h>
+#include "Settings.h"
+#include "Console.h"
+#include "Game.h"
 
-#include "SFML/Graphics.hpp"
 
-const int WEIGHT = 1280;
-const int HEIGHT = 720;
+int main() {
+    Console console("Main");
 
-int main() 
-{
-	sf::RenderWindow window(sf::VideoMode(WEIGHT, HEIGHT), "SS");
-	sf::Event e;
+    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SS");
+    Game game;
 
-	while (window.isOpen())
-	{
-		while (window.pollEvent(e))
-		{
-			if (e.type == sf::Event::Closed) window.close();
-		}
-	}
+    sf::Clock clock;
 
-	return 0;
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+            //else if (event.type == sf::Event::KeyPressed) {
+            //    if (event.key.code == sf::Keyboard::Left)
+            //        game.Move(Direction::Left);
+            //    else if (event.key.code == sf::Keyboard::Right)
+            //        game.Move(Direction::Right);
+            //    else if (event.key.code == sf::Keyboard::Up)
+            //        game.Move(Direction::Up);
+            //    else if (event.key.code == sf::Keyboard::Down)
+            //        game.Move(Direction::Down);
+            //}
+        }
+
+        float deltaTime = clock.restart().asSeconds();;
+
+        game.Update(deltaTime);
+
+        window.clear();
+        window.draw(game);
+        window.display();
+    }
+
+    return 0;
 }
