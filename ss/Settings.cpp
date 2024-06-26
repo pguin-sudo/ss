@@ -1,5 +1,7 @@
 #include "Settings.h"
 
+const bool IS_DEBUG_MODE_ON = false;
+
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 const int FRAMERATE = 75;

@@ -33,7 +33,9 @@ void Engine::Update(const float& deltaTime) {
     auto cached_amortization = Settings::GetAmortization();
     auto cached_gravity_strength = Settings::GetGravityStrength();
 
-    for (auto& circle : circles) {
+    for (size_t i = 0; i < circles.size(); ++i) {
+        Circle& circle = circles[i];
+
         // Handle wall collisions
         float radius = circle.radius;
 
@@ -44,7 +46,7 @@ void Engine::Update(const float& deltaTime) {
 
         if (circle.position.x + radius > SCREEN_WIDTH - PHYSICS_MARGIN) {
             circle.position.x = SCREEN_WIDTH - PHYSICS_MARGIN - radius;
-            circle.velocity.x *= cached_amortization;
+            circle.velocity.x *= -cached_amortization;
         }
 
         if (circle.position.y - radius < PHYSICS_MARGIN) {
@@ -57,34 +59,41 @@ void Engine::Update(const float& deltaTime) {
             circle.velocity.y *= -cached_amortization;
         }
 
-        //// Handle circle collisions
-        //for (Circle& otherCircle : circles) {
-        //    if (&circle == &otherCircle) {
-        //        continue;
-        //    }
+        // Handle circle collisions
+        for (size_t j = i + 1; j < circles.size(); ++j) {
+            Circle& otherCircle = circles[j];
 
-        //    float distanceSq = Vector2::DistanceSq(circle.position, otherCircle.position);
-        //    float collisionDistance = circle.radius + otherCircle.radius;
+            if (&otherCircle == &circle) {
+                continue;
+            }
 
-        //    if (distanceSq < collisionDistance * collisionDistance) {
-        //        Vector2 normal = Vector2::Normalize(otherCircle.position - circle.position);
-        //        Vector2 relativeVelocity = otherCircle.velocity - circle.velocity;
-        //        float dotProduct = Vector2::Dot(relativeVelocity, normal);
+            float distance = Vector2::Distance(circle.position, otherCircle.position);
+            float collisionDistance = circle.radius + otherCircle.radius;
 
-        //        float impulseMag = (2.0f * dotProduct) / (circle.mass + otherCircle.mass);
+            if (distance < collisionDistance) {
+                Vector2 normal = Vector2::Normalize(otherCircle.position - circle.position);
+                Vector2 relativeVelocity = otherCircle.velocity - circle.velocity;
+                float dotProduct = Vector2::Dot(relativeVelocity, normal);
 
-        //        // Apply impulse
-        //        Vector2 impulse = normal * impulseMag;
+                if (dotProduct < 0) {
+                    float impulseMag = (-(1 + cached_amortization) * dotProduct) /
+                        (1 / circle.mass + 1 / otherCircle.mass);
 
-        //        circle.velocity += impulse / circle.mass;
-        //        otherCircle.velocity -= impulse / otherCircle.mass;
+                    // Apply impulse
+                    Vector2 impulse = normal * impulseMag;
 
-        //        // Separate the circles to avoid overlap
-        //        float overlap = collisionDistance - sqrt(distanceSq);
-        //        circle.position -= normal * overlap * 0.5f;
-        //        otherCircle.position += normal * overlap * 0.5f;
-        //    }
-        //}
+                    circle.velocity -= impulse / circle.mass;
+                    otherCircle.velocity += impulse / otherCircle.mass;
+
+                    // Separate circles to avoid overlap
+                    float overlap = collisionDistance - distance;
+                    Vector2 separationVector = normal * overlap * 0.5f;
+
+                    circle.position -= separationVector;
+                    otherCircle.position += separationVector;
+                }
+            }
+        }
 
         // Handle gravity
         Vector2 gravity = { 0, cached_gravity_strength * circle.mass };

@@ -78,8 +78,8 @@ float Vector2::Dot(const Vector2& vector, const Vector2& other) {
     return vector.x * other.x + vector.y * other.y;
 }
 
-float Vector2::DistanceSq(const Vector2& vector, const Vector2& other) {
+float Vector2::Distance(const Vector2& vector, const Vector2& other) {
     float dx = other.x - vector.x;
     float dy = other.y - vector.y;
-    return std::pow(dx, 2) + std::pow(dy, 2);
+    return std::sqrt(std::pow(dx, 2) + std::pow(dy, 2));
 }

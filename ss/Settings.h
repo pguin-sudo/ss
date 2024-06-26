@@ -22,6 +22,8 @@ public:
     static void SetAmortization(float value);
 };
 
+extern const bool IS_DEBUG_MODE_ON;
+
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 extern const int FRAMERATE;

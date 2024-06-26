@@ -27,7 +27,7 @@ public:
     static Vector2 Normalize(const Vector2& vector);
     static float Magnitude(const Vector2& vector);
     static float Dot(const Vector2& vector, const Vector2& other);
-    static float DistanceSq(const Vector2& vector, const Vector2& other);
+    static float Distance(const Vector2& vector, const Vector2& other);
 };
 
 #endif
