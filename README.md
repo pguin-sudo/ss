@@ -13,8 +13,7 @@ Sphere Sandbox is a simple physics engine implemented in C++ using the SFML libr
 ## Requirements
 
 - C++ compiler that supports C++11 (e.g., GCC, Clang)
-- SFML library (Simple and Fast Multimedia Library) installed
-
+  
 ## Installation
 
 1. **Clone the repository:**
