@@ -4,25 +4,26 @@
 #include <SFML/Graphics.hpp>
 
 #include "Console.h"
+#include "Vector2.h"
 
 class Settings
 {
 private:
-    sf::Font font;
-    static float physicsMargin;
-    static float gravityStrength;
-    static float amortization;
+	sf::Font font;
+	static Vector2 gravityStrength;
+	static float amortization;
+	static bool debug_mode;
 
 public:
-    Settings();
-    sf::Font& GetFont();
-    static float GetGravityStrength();
-    static float GetAmortization();
-    static void SetGravityStrength(float value);
-    static void SetAmortization(float value);
+	Settings();
+	sf::Font& GetFont();
+	static Vector2& GetGravityStrength();
+	static float& GetAmortization();
+	static bool& GetDebugMode();
+	static void SetGravityStrength(Vector2 value);
+	static void SetAmortization(float value);
+	static void SetDebugMode(bool value);
 };
-
-extern const bool IS_DEBUG_MODE_ON;
 
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;

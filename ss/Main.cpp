@@ -6,96 +6,84 @@
 
 
 int main() {
-    Console console("Main");
+	sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Spheres Sandbox");
 
-    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SS");
-    Game game;
+	Game game;
+	Settings settings;
+	Console console("Main");
 
-    Settings settings;
+	sf::Text text("", settings.GetFont(), 15);
+	text.setFillColor(sf::Color(240, 240, 240));
+	text.setPosition(50.f, 1.5f);
 
-    // Текст с обозначением клавиш
-    sf::Text text("", settings.GetFont(), 15);
-    text.setFillColor(sf::Color(240, 240, 240));
-    text.setPosition(50.f, 1.5f);
+	sf::Clock clock;
 
-    sf::Clock clock;
+	float& r_gravitational_acceleration = Settings::GetGravityStrength().y;
+	float& r_amortization = Settings::GetAmortization();
+	bool& r_debug_mode = Settings::GetDebugMode();
 
-    if (IS_DEBUG_MODE_ON) {
-        while (window.isOpen()) {
-            sf::Event event;
-            while (window.pollEvent(event)) {
+	while (window.isOpen()) {
 
-                switch (event.type) {
-                case sf::Event::Closed:
-                    window.close();
-                    break;
-                case sf::Event::KeyPressed:
-                    if (event.key.code == sf::Keyboard::Up)
-                        Settings::SetGravityStrength(Settings::GetGravityStrength() + 0.98066f);
-                    else if (event.key.code == sf::Keyboard::Down)
-                        Settings::SetGravityStrength(Settings::GetGravityStrength() - 0.98066f);
+		float deltaTime = clock.restart().asSeconds();
 
-                    if (event.key.code == sf::Keyboard::Right)
-                        Settings::SetAmortization(Settings::GetAmortization() + 0.05f);
-                    else if (event.key.code == sf::Keyboard::Left)
-                        Settings::SetAmortization(Settings::GetAmortization() - 0.05f);
+		sf::Event event;
+		while (window.pollEvent(event)) {
+			switch (event.type) {
+			case sf::Event::Closed:
+				window.close();
+				break;
+			case sf::Event::KeyPressed:
+				if (event.key.code == sf::Keyboard::Up) {
+					float old = r_gravitational_acceleration;
+					Settings::SetGravityStrength(Vector2(0.f, old + 0.98066f));
+					console.Print("Gravity strength has been changed from " + std::to_string(old) + " to " + std::to_string(r_gravitational_acceleration), MessageType::DEBUG);
+				}
+				else if (event.key.code == sf::Keyboard::Down) {
+					float old = r_gravitational_acceleration;
+					Settings::SetGravityStrength(Vector2(0.f, old - 0.98066f));
+					console.Print("Gravity strength has been changed from " + std::to_string(old) + " to " + std::to_string(r_gravitational_acceleration), MessageType::DEBUG);
+				}
+				else if (event.key.code == sf::Keyboard::Right) {
+					float old = r_amortization;
+					Settings::SetAmortization(old + 0.05f);
+					console.Print("Amortization has been changed from " + std::to_string(old) + " to " + std::to_string(r_amortization), MessageType::DEBUG);
+				}
+				else if (event.key.code == sf::Keyboard::Left) {
+					float old = r_amortization;
+					Settings::SetAmortization(old - 0.05f);
+					console.Print("Amortization has been changed from " + std::to_string(old) + " to " + std::to_string(r_amortization), MessageType::DEBUG);
+				}
+				else if (event.key.code == sf::Keyboard::E) {
+					Settings::SetDebugMode(!r_debug_mode);
+					console.Print("Debug mode has been changed from " + std::to_string(!r_debug_mode) + " to " + std::to_string(r_debug_mode), MessageType::DEBUG);
+				}
+				else if (event.key.code == sf::Keyboard::R) {
+					game = Game();
+					console.Print("New game created", MessageType::INFO);
+				}
 
-                    if (event.key.code == sf::Keyboard::Space)
-                    {
-                        game.Update(0.025);
+				if (event.key.code == sf::Keyboard::Space && r_debug_mode) {
+					game.Update(0.025f);
+				}
 
-                        
-                    }
-                    break;
-                default:
-                    break;
-                }
+				break;
+			default:
+				break;
+			}
+		}
 
-                text.setString("Gravity       ( UP /DOWN):  " + std::to_string(Settings::GetGravityStrength()) + '\n' +
-                    "Amortization  (RIGHT/LEFT):  " + std::to_string(Settings::GetAmortization()));
+		if (!r_debug_mode) {
+			game.Update(deltaTime);
+		}
 
-                window.clear();
-                window.draw(text);
-                window.draw(game);
-                window.display();
-            }
-        }
-    }
-    else {
-        while (window.isOpen()) {
-            sf::Event event;
-            while (window.pollEvent(event)) {
-                switch (event.type) {
-                case sf::Event::Closed:
-                    window.close();
-                    break;
-                case sf::Event::KeyPressed:
-                    if (event.key.code == sf::Keyboard::Up)
-                        Settings::SetGravityStrength(Settings::GetGravityStrength() + 0.98066f);
-                    else if (event.key.code == sf::Keyboard::Down)
-                        Settings::SetGravityStrength(Settings::GetGravityStrength() - 0.98066f);
+		text.setString("Gravity       ( UP /DOWN):  " + std::to_string(r_gravitational_acceleration) + "          Debug mode (E): " + std::to_string(r_debug_mode) + '\n' +
+			"Amortization  (RIGHT/LEFT):  " + std::to_string(r_amortization) + "                Delta time: " + std::to_string(deltaTime));
 
-                    if (event.key.code == sf::Keyboard::Right)
-                        Settings::SetAmortization(Settings::GetAmortization() + 0.05f);
-                    else if (event.key.code == sf::Keyboard::Left)
-                        Settings::SetAmortization(Settings::GetAmortization() - 0.05f);
-                    break;
-                default:
-                    break;
-                }
-            }
-            float deltaTime = clock.restart().asSeconds();;
+		window.clear();
+		window.draw(text);
+		window.draw(game);
+		window.display();
+	}
 
-            game.Update(deltaTime);
-
-            text.setString("Gravity       ( UP /DOWN):  " + std::to_string(Settings::GetGravityStrength()) + '\n' +
-                "Amortization  (RIGHT/LEFT):  " + std::to_string(Settings::GetAmortization()));
-
-            window.clear();
-            window.draw(text);
-            window.draw(game);
-            window.display();
-        }
-    }
-    return 0;
+	return 0;
 }
