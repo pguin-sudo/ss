@@ -50,6 +50,9 @@
     <ClInclude Include="Vector2.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\calibri.ttf">

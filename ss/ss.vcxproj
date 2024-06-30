@@ -150,6 +150,7 @@
     <ClInclude Include="Console.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Physics.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>

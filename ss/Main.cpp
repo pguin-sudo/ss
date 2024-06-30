@@ -22,6 +22,8 @@ int main() {
 	float& r_amortization = Settings::GetAmortization();
 	bool& r_debug_mode = Settings::GetDebugMode();
 
+	Vector2* p_new_circle_pos = nullptr;
+
 	while (window.isOpen()) {
 
 		float deltaTime = clock.restart().asSeconds();
@@ -61,11 +63,25 @@ int main() {
 					game = Game();
 					console.Print("New game created", MessageType::INFO);
 				}
-
-				if (event.key.code == sf::Keyboard::Space && r_debug_mode) {
+				else if (event.key.code == sf::Keyboard::Space && r_debug_mode) {
 					game.Update(0.025f);
 				}
-
+				break;
+			case sf::Event::MouseButtonPressed:
+				if (event.key.code == sf::Mouse::Right) {
+					auto new_circle = Random::GetInstance().GetRandomCircle();
+					p_new_circle_pos = &new_circle.position;
+					game.physicsEngine->AddCircle(new_circle);
+					*p_new_circle_pos = Vector2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
+				}
+			case sf::Event::MouseButtonReleased:
+				if (event.key.code == sf::Mouse::Right) {
+					p_new_circle_pos = nullptr;
+				}
+			case sf::Event::MouseMoved:
+				if (p_new_circle_pos != nullptr ) {
+					*p_new_circle_pos = Vector2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
+				}
 				break;
 			default:
 				break;
